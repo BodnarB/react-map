@@ -1,4 +1,4 @@
-import { MapContainer, TileLayer, Marker } from 'react-leaflet'
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
 import { useState, useEffect } from 'react'
 
 function App() {
@@ -20,27 +20,40 @@ function App() {
       const filterData = data.filter(element => element.address.region === "Europe")
       seteuropeData(filterData)
     }
-    console.log('lefut datauseeffect')
   }, [data])
 
-  function apiBtn() {
-    console.log('europeData:', europeData)
-  }
+
 
   return (
     <div className="App">
-      <button onClick={apiBtn}>API</button>
-      <MapContainer center={[51.505, -0.09]} zoom={13} scrollWheelZoom={true}>
+      <h1 className='page-title'>Tesla supercharger map</h1>
+      <div className='select-region-container'>
+        <p>Select region:</p>
+        <select>
+          <option>Europe</option>
+          <option>Asia Pacific</option>
+          <option>North America</option>
+        </select>
+      </div>
+      <MapContainer center={[51.505, -0.09]} zoom={6} scrollWheelZoom={true}>
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        {europeData.map(tesla=>(
-            <Marker 
-            key={tesla.id}
-            position={[tesla.gps.latitude, tesla.gps.longitude]}>
+        {europeData.length > 0 &&
+          europeData.map(tesla => (
+            <Marker
+              key={tesla.id}
+              position={[tesla.gps.latitude, tesla.gps.longitude]}>
+              <Popup className='map-popup' position={[tesla.gps.latitude, tesla.gps.longitude]}>
+                <p className='popup-name'>{tesla.name}</p>
+                <p>{`GPS: ${tesla.gps.latitude}, ${tesla.gps.longitude}`}</p>
+                <p>{`Power: ${tesla.powerKilowatt}kW`}</p>
+                <p>{`Stalls: ${tesla.stallCount}`}</p>
+              </Popup>
             </Marker>
-        ))}
+          ))
+        }
       </MapContainer>
     </div>
   )
