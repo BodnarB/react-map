@@ -1,4 +1,4 @@
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
+import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet'
 import { useState, useEffect } from 'react'
 
 function App() {
@@ -49,18 +49,27 @@ function App() {
     })
   }
 
+  function ChangeView({ center }) {
+    const map = useMap()
+    map.setView(center)
+    return null
+  }
+
   return (
     <div className="App">
-      <h1 className='page-title'>Tesla supercharger map</h1>
-      <div className='select-region-container'>
-        <p>Select region:</p>
-        <select onChange={(e) => { changeRegion(e) }} className='select-region-dropdown'>
-          <option>Europe</option>
-          <option>Asia Pacific</option>
-          <option>North America</option>
-        </select>
-      </div>
-      <MapContainer center={selectedRegion.center} zoom={6} scrollWheelZoom={true}>
+      <header>
+        <h1 className='page-title'>Tesla supercharger map</h1>
+        <div className='select-region-container'>
+          <p>Select region:</p>
+          <select onChange={(e) => { changeRegion(e) }} className='select-region-dropdown'>
+            <option>Europe</option>
+            <option>Asia Pacific</option>
+            <option>North America</option>
+          </select>
+        </div>
+      </header>
+      <MapContainer center={selectedRegion.center} zoom={5} scrollWheelZoom={true}>
+        <ChangeView center={selectedRegion.center} />
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
