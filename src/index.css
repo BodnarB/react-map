@@ -74,3 +74,9 @@ button:hover {
   margin: 1rem;
   text-align: center;
 }
+
+.select-region-dropdown {
+  border: 1px solid rgba(0, 0, 0, 0.4);
+  border-radius: 1rem;
+  padding: 0.1rem 0.3rem;
+}
